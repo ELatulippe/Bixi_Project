@@ -1,4 +1,4 @@
-# importing necessary modules
+# Importing necessary modules
 import requests, time
 from io import BytesIO
 from pathlib import Path
@@ -8,26 +8,19 @@ from zipfile import ZipFile
 # Create a data directory
 Path("BIXI_Data").mkdir(parents=True, exist_ok=True)
 
-
-# Extract all  
+# Find all links of Zip files on the webpage
 url = "https://bixi.com/en/open-data"
 r = requests.get(url)
 soup = BeautifulSoup(r.content, "html.parser")
 data_containter = soup.find("div", class_="container open-data-history")
 
-url_links = []
+# Extract all zip files from href on webpage
 for link in data_containter.find_all("a", class_="document-csv col-md-2 col-sm-4 col-xs-12", href=True):
-    url_links.append((link.get_text(), link['href']))
-    
-# Download all zip files and content
-for i, _ in enumerate(url_links):
-    link = url_links[i][1]
-    print(link)
-    req = requests.get(link) 
+    req = requests.get(link['href']) 
+    print(link.get_text(), link['href'])
     time.sleep(5)
     with  ZipFile(BytesIO(req.content), 'r') as zipObj:
-        zipObj.extractall("./BIXI_Data/" + url_links[i][0])
-
+        zipObj.extractall("./BIXI_Data/" + link.get_text())
 
 
 

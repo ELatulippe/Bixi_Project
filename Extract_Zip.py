@@ -1,5 +1,6 @@
 # Importing necessary modules
 import requests, time
+import os, shutil
 from io import BytesIO
 from pathlib import Path
 from bs4 import BeautifulSoup
@@ -22,7 +23,22 @@ for link in data_containter.find_all("a", class_="document-csv col-md-2 col-sm-4
     with  ZipFile(BytesIO(req.content), 'r') as zipObj:
         zipObj.extractall("./BIXI_Data/" + link.get_text())
 
+# Change subdirectory for Zip files of years 2014, 2015, 2016, 2017
+years = [2014,2015,2016, 2017]
+for year in years:
+    if year == 2017: 
+        source_dir = f"./BIXI_Data/Year {year}/{year}/"
+        target_dir = f"./BIXI_Data/Year {year}/" 
+    else: 
+        source_dir = f"./BIXI_Data/Year {year}/BixiMontrealRentals{year}/"
+        target_dir = f"./BIXI_Data/Year {year}/"
 
+    file_names = os.listdir(source_dir)
+        
+    for file_name in file_names:
+        shutil.move(os.path.join(source_dir, file_name), target_dir)
+
+    os.rmdir(source_dir)
 
 
 

@@ -40,6 +40,8 @@ for year in years:
 
     os.rmdir(source_dir)
 
-
+# Rename stations.csv from Year 2020 to Stations_2020.csv
+os.rename('./BIXI_Data/Year 2020/stations.csv','./BIXI_Data/Year 2020/Stations_2020.csv')
+os.rename('./BIXI_Data/Year 2021/2021_stations.csv','./BIXI_Data/Year 2021/Stations_2021.csv')
 
 
